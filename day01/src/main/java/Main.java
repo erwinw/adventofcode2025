@@ -28,7 +28,38 @@ void part1(List<String> doc) {
 }
 
 void part2(List<String> doc) {
-    println("Part 2");
+    println("Part 2, have " + doc.size() + " lines");
+    int position = 50;
+    int zeroCount = 0;
+    for (String line : doc) {
+        int startPosition = position;
+        println("Position at start of line: " + position);
+        char direction = line.charAt(0);
+        int amount = Integer.parseInt(line.substring(1));
+        println("Line : " + line + " Direction: " + direction + " Amount: " + amount);
+
+        int clicks = amount / 100;
+        int rotation = amount % 100;
+
+        zeroCount += clicks;
+        
+        switch (direction) {
+            case 'R' -> {
+                if (position + rotation >= 100) {
+                    zeroCount++;
+                }
+                position = (position + rotation) % 100;
+            }
+            case 'L' -> {
+                if (position != 0 && position - rotation <= 0) {
+                    zeroCount++;
+                }
+                position = (position - rotation + 100) % 100;
+            }
+        }
+    }
+    println("Final position: " + position);
+    println("Zero crossings: " + zeroCount);
 }
 
 List<String> readInput(String inputType) {
