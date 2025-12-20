@@ -32,7 +32,6 @@ void part2(List<String> doc) {
     int position = 50;
     int zeroCount = 0;
     for (String line : doc) {
-        int startPosition = position;
         println("Position at start of line: " + position);
         char direction = line.charAt(0);
         int amount = Integer.parseInt(line.substring(1));
@@ -42,7 +41,7 @@ void part2(List<String> doc) {
         int rotation = amount % 100;
 
         zeroCount += clicks;
-        
+
         switch (direction) {
             case 'R' -> {
                 if (position + rotation >= 100) {

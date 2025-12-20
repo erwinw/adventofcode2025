@@ -1,7 +1,35 @@
 import static java.lang.IO.println;
+import static java.lang.Long.parseLong;
 
 void part1(List<String> doc) {
     println("Part 1");
+    String line = doc.getFirst();
+    String[] ranges = line.split(",");
+
+    long invalidIdsSum = 0;
+    for ( String range : ranges ) {
+        println("Part: " + range);
+        String[] rangeParts = range.split("-");
+        long lowerBound = parseLong(rangeParts[0]);
+        long upperBound = parseLong(rangeParts[1]);
+        for (long productId = lowerBound; productId <= upperBound; productId++) {
+            boolean idInvalid = isProductIdInvalidPart1(productId);
+            if (idInvalid) {
+                invalidIdsSum += productId;
+            }
+        }
+    }
+    println("All done; invalid ids sum: " + invalidIdsSum + "\n");
+}
+
+boolean isProductIdInvalidPart1(long  productId) {
+    String stringVersion = "" + productId;
+    int halfLength = stringVersion.length() / 2;
+    String head = stringVersion.substring(0, halfLength);
+    String tail = stringVersion.substring(halfLength);
+    boolean isInvalid = head.equals(tail);
+//    println("Is invalid " + productId + " => " + stringVersion + " [" + head + " | " + tail + "] = " + isInvalid);
+    return isInvalid;
 }
 
 void part2(List<String> doc) {
@@ -26,7 +54,7 @@ void main(String[] args) {
     println("Starting day 2 with [" + args.length + "]" + Arrays.toString(args));
 
     if (args.length != 2) {
-        println("Usage: java Main part1|part2 testinput|input");
+        println("Usage: java Main part1|part2 testinput.txt|input");
         return;
     }
 
@@ -34,15 +62,15 @@ void main(String[] args) {
     println("Selected part: " + part);
 
     if (!part.equals("part1") && !part.equals("part2")) {
-        println("Usage: java Main part1|part2 testinput|input");
+        println("Usage: java Main part1|part2 testinput.txt|input");
         return;
     }
 
     String inputType = args[1];
-    List<String> doc = readInput(inputType);
+    List<String> input = readInput(inputType);
 
     switch(part) {
-        case "part1" -> part1(doc);
-        case "part2" -> part2(doc);
+        case "part1" -> part1(input);
+        case "part2" -> part2(input);
     }
 }
