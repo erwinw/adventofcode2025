@@ -34,7 +34,44 @@ boolean isProductIdInvalidPart1(long  productId) {
 
 void part2(List<String> doc) {
     println("Part 2");
+    String line = doc.getFirst();
+    String[] ranges = line.split(",");
+
+    long invalidIdsSum = 0;
+    for ( String range : ranges ) {
+        println("Part: " + range);
+        String[] rangeParts = range.split("-");
+        long lowerBound = parseLong(rangeParts[0]);
+        long upperBound = parseLong(rangeParts[1]);
+        for (long productId = lowerBound; productId <= upperBound; productId++) {
+            boolean idInvalid = isProductIdInvalidPart2(productId);
+            if (idInvalid) {
+                invalidIdsSum += productId;
+            }
+        }
+    }
+    println("All done; invalid ids sum: " + invalidIdsSum + "\n");
 }
+
+boolean isProductIdInvalidPart2(long  productId) {
+    String stringVersion = "" + productId;
+    int wholeLength = stringVersion.length();
+    int halfLength = wholeLength / 2;
+    for (int substringLength = 1; substringLength <= halfLength; substringLength += 1) {
+        int times = wholeLength / substringLength;
+        // Is string length a whole multiple of the substring length?
+        if (substringLength * times != wholeLength) {
+            continue;
+        }
+        String head = stringVersion.substring(0, substringLength);
+        if (head.repeat(times).equals(stringVersion)) {
+            println("Invalid: " + head + " x " + times + " => " + stringVersion);
+            return true;
+        }
+    }
+    return false;
+}
+
 
 List<String> readInput(String inputType) {
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(inputType + ".txt")) {
