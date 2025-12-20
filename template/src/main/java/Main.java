@@ -8,14 +8,15 @@ void part2(Stream<String> doc) {
     println("Part 2");
 }
 
-Stream<String> readInput(String inputType) {
+void withInput(String inputType,
+               Consumer<Stream<String>> consumer) {
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(inputType + ".txt")) {
         if (resource == null) {
             throw new RuntimeException("Resource not found: " + inputType + ".txt");
         }
         try (InputStreamReader inputStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-            return bufferedReader.lines();
+            consumer.accept(bufferedReader.lines());
         }
     } catch (IOException e) {
         throw new RuntimeException(e);
@@ -39,10 +40,9 @@ void main(String[] args) {
     }
 
     String inputType = args[1];
-    Stream<String> input = readInput(inputType);
 
     switch(part) {
-        case "part1" -> part1(input);
-        case "part2" -> part2(input);
+        case "part1" -> withInput(inputType, this::part1);
+        case "part2" -> withInput(inputType, this::part2);
     }
 }
